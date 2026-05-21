@@ -24,6 +24,8 @@ This repository contains a full-stack business application workflow tracker buil
 
 ### Backend
 
+This backend uses PostgreSQL as its database.
+
 1. Install Python 3.10+ or 3.11.
 2. Create and activate a virtual environment inside `backend/`:
    ```bash
@@ -35,9 +37,23 @@ This repository contains a full-stack business application workflow tracker buil
    ```bash
    pip install -r requirements.txt
    ```
-4. Copy the example environment file and update values:
+4. Copy the example environment file and update values for PostgreSQL:
    ```bash
    copy .env.example .env
+   ```
+   Then set your PostgreSQL values in `backend/.env`, for example:
+   ```env
+   POSTGRES_DB=your_db_name
+   POSTGRES_USER=your_db_user
+   POSTGRES_PASSWORD=your_db_password
+   POSTGRES_HOST=127.0.0.1
+   POSTGRES_PORT=5432
+   ```
+   If PostgreSQL is not yet set up, create the database and user with:
+   ```sql
+   CREATE DATABASE your_db_name;
+   CREATE USER your_db_user WITH PASSWORD 'your_db_password';
+   GRANT ALL PRIVILEGES ON DATABASE your_db_name TO your_db_user;
    ```
 5. Run database migrations:
    ```bash
