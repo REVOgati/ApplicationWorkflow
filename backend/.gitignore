@@ -1,0 +1,12 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Django and local env
+*.sqlite3
+*.log
+.env
+.env.*
+
+# VS Code
+.vscode/
