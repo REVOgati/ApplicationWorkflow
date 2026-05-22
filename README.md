@@ -99,6 +99,7 @@ This backend uses PostgreSQL as its database.
 - Add pagination, search, and filtering
 - Add automated tests for API and frontend flows
 - Add production-grade deployment scripts and CI pipeline
+- Use a dynamic application form where fields change depending on application type.
 
 ## API Role Prefixes (Demo Behavior)
 
