@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { getApplication, submitApplication, startReview } from '../api';
+import { getApplication, getApplicationOfficial, submitApplication, startReview } from '../api';
+import { useRole } from '../RoleContext';
 
 function ApplicationDetail() {
   const { id } = useParams();
@@ -10,12 +11,16 @@ function ApplicationDetail() {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
 
+  const { role } = useRole();
+
   useEffect(() => {
-    getApplication(id)
+    const loader = role === 'official' ? getApplicationOfficial : getApplication;
+    setLoading(true);
+    loader(id)
       .then(setApplication)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, role]);
 
   const refresh = async () => {
     setLoading(true);
@@ -128,28 +133,28 @@ function ApplicationDetail() {
         <p>{application.reviewer_comment || 'No reviewer comment yet.'}</p>
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          {canEdit && (
+          {role === 'applicant' && canEdit && (
             <Link className="button secondary" to={`/applications/${id}/edit`}>
               Edit
             </Link>
           )}
-          {canSubmit && (
+          {role === 'applicant' && canSubmit && (
             <button className="button success" onClick={handleSubmit} disabled={actionLoading}>
               Submit Application
             </button>
           )}
-          {canReview && (
+          {role === 'official' && canReview && (
             <button className="button" onClick={handleStartReview} disabled={actionLoading}>
               Start Review
             </button>
           )}
-          {canDecide && (
+          {role === 'official' && canDecide && (
             <Link className="button" to={`/applications/${id}/decision`}>
               Record Decision
             </Link>
           )}
-          <button className="button secondary" onClick={() => navigate(-1)}>
-            Back
+          <button className="button secondary" onClick={() => navigate(application.status === 'Draft' ? -1 : '/') }>
+            {application.status === 'Draft' ? 'Back' : 'To dashboard'}
           </button>
         </div>
       </div>

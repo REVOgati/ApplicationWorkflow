@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createApplication, getApplication, updateApplication, submitApplication } from '../api';
+import { useRole } from '../RoleContext';
 
 const APPLICATION_TYPES = [
   'Recordation',
@@ -13,6 +14,7 @@ const APPLICATION_TYPES = [
 function ApplicationForm() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { role } = useRole();
   const [form, setForm] = useState({
     applicant_name: '',
     applicant_email: '',
@@ -40,6 +42,13 @@ function ApplicationForm() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  useEffect(() => {
+    // Only applicants can create or edit applications in the UI
+    if (role !== 'applicant') {
+      navigate('/');
+    }
+  }, [role, navigate]);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -64,8 +73,12 @@ function ApplicationForm() {
     setSaving(true);
     setError('');
     try {
-      const application = id ? await submitApplication(id) : await createApplication(form);
-      if (!id) {
+      let application;
+      if (id) {
+        await updateApplication(id, form);
+        application = await submitApplication(id);
+      } else {
+        application = await createApplication(form);
         await submitApplication(application.id);
       }
       navigate(`/applications/${application.id}`);

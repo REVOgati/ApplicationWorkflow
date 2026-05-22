@@ -20,41 +20,49 @@ async function fetchJson(path, options = {}) {
 }
 
 export async function listApplications() {
-  return fetchJson('/applications/');
+  return fetchJson('/applicant/applications/');
 }
 
 export async function getApplication(id) {
-  return fetchJson(`/applications/${id}/`);
+  return fetchJson(`/applicant/applications/${id}/`);
+}
+
+export async function listApplicationsOfficial() {
+  return fetchJson('/official/applications/');
+}
+
+export async function getApplicationOfficial(id) {
+  return fetchJson(`/official/applications/${id}/`);
 }
 
 export async function createApplication(payload) {
-  return fetchJson('/applications/', {
+  return fetchJson('/applicant/applications/', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
 }
 
 export async function updateApplication(id, payload) {
-  return fetchJson(`/applications/${id}/`, {
+  return fetchJson(`/applicant/applications/${id}/`, {
     method: 'PUT',
     body: JSON.stringify(payload),
   });
 }
 
 export async function submitApplication(id) {
-  return fetchJson(`/applications/${id}/submit/`, {
+  return fetchJson(`/applicant/applications/${id}/submit/`, {
     method: 'POST',
   });
 }
 
 export async function startReview(id) {
-  return fetchJson(`/applications/${id}/start-review/`, {
+  return fetchJson(`/official/applications/${id}/start-review/`, {
     method: 'POST',
   });
 }
 
 export async function recordDecision(id, payload) {
-  return fetchJson(`/applications/${id}/decision/`, {
+  return fetchJson(`/official/applications/${id}/decision/`, {
     method: 'POST',
     body: JSON.stringify(payload),
   });

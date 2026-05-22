@@ -1,20 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { listApplications } from '../api';
+import { listApplications, listApplicationsOfficial } from '../api';
+import { useRole } from '../RoleContext';
 
 function ApplicationList() {
   const [applications, setApplications] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const { role } = useRole();
+
   useEffect(() => {
-    listApplications()
+    const loader = role === 'official' ? listApplicationsOfficial : listApplications;
+    setLoading(true);
+    loader()
       .then((result) => {
         setApplications(result.results || result.items || result);
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [role]);
 
   return (
     <div>

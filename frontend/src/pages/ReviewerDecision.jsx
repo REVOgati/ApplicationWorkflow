@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getApplication, recordDecision } from '../api';
+import { useRole } from '../RoleContext';
 
 const DECISIONS = [
   { value: 'approve', label: 'Approve' },
@@ -11,6 +12,7 @@ const DECISIONS = [
 function ReviewerDecision() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { role } = useRole();
   const [application, setApplication] = useState(null);
   const [decision, setDecision] = useState('approve');
   const [reviewer_comment, setReviewerComment] = useState('');
@@ -83,8 +85,8 @@ function ReviewerDecision() {
           <button className="button" type="submit" disabled={submitting}>
             Record Decision
           </button>
-          <button className="button secondary" type="button" onClick={() => navigate(-1)}>
-            Cancel
+          <button className="button secondary" type="button" onClick={() => navigate('/') }>
+            To dashboard
           </button>
         </div>
       </form>

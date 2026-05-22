@@ -99,3 +99,28 @@ This backend uses PostgreSQL as its database.
 - Add pagination, search, and filtering
 - Add automated tests for API and frontend flows
 - Add production-grade deployment scripts and CI pipeline
+
+## API Role Prefixes (Demo Behavior)
+
+Implemented demo API routes (namespaced):
+
+- Applicant endpoints (`/api/applicant/...`):
+   - `GET  /api/applicant/applications/` — list (applicant-facing)
+   - `POST /api/applicant/applications/` — create application
+   - `GET  /api/applicant/applications/{id}/` — retrieve
+   - `PUT  /api/applicant/applications/{id}/` — update (draft)
+   - `POST /api/applicant/applications/{id}/submit/` — submit for review
+
+- Official endpoints (`/api/official/...`):
+   - `GET  /api/official/applications/` — list (includes Submitted, Under Review, Approved, Rejected)
+   - `GET  /api/official/applications/{id}/` — retrieve
+   - `POST /api/official/applications/{id}/start-review/` — mark as under review
+   - `POST /api/official/applications/{id}/decision/` — record decision (body: `decision`, `reviewer_comment`)
+
+- Legacy router (`/api/...`) is kept for backwards compatibility and mirrors the same endpoints above.
+
+Demo notes:
+- The official list intentionally includes decided items (`Approved`/`Rejected`) so reviewers can see outcome history during demonstrations.
+- The frontend role toggle is a UI convenience only and is not security — production must use authenticated users and server-side authorization.
+
+
